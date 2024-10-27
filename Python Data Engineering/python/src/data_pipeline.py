@@ -35,9 +35,13 @@ def pipeline(data_dir: str, outputs_dir: str) -> None:
     drugs_df['drug'] = drugs_df['drug'].str.capitalize()
     logging.info("Drug names capitalized successfully.")
 
-    # TODO: remove duplicates from pubmed_df and clinical_trials_df
-    pubmed_df = pubmed_df.drop_duplicates(subset='title')
-    clinical_trials_df = clinical_trials_df.drop_duplicates(subset='scientific_title')
+    # Rename columns in clinical_trials_df
+    clinical_trials_df = clinical_trials_df.rename(columns={'scientific_title': 'title'})
+    logging.info("Column renamed successfully.")
+
+    # remove duplicates from pubmed_df and clinical_trials_df
+    pubmed_df = pubmed_df.drop_duplicates(subset='title').reset_index(drop=True)
+    clinical_trials_df = clinical_trials_df.drop_duplicates(subset='title').reset_index(drop=True)
     logging.info("Duplicates removed successfully.")
 
     # Parse dates in PubMed and Clinical Trials data
@@ -52,11 +56,9 @@ def pipeline(data_dir: str, outputs_dir: str) -> None:
     drugs = drugs_df['drug'].tolist()
 
     logging.info("Processing drug mentions from PubMed and Clinical Trials data...")
-    pubmed_mentions_graph = process_mentions(pubmed_df, drugs, 'PubMed')
+    pubmed_mentions_graph = process_mentions(pubmed_df, drugs_list=drugs, source_name='PubMed')
     logging.info("Processed PubMed mentions successfully.")
-    trials_mentions_graph = process_mentions(
-        clinical_trials_df, drugs, 'Clinical Trial', title_col='scientific_title'
-    )
+    trials_mentions_graph = process_mentions(clinical_trials_df, drugs_list=drugs, source_name='Clinical Trial')
     logging.info("Processed Clinical Trials mentions successfully.")
 
     # Merge PubMed and Clinical Trials mentions into one final output

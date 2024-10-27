@@ -82,7 +82,6 @@ def process_mentions(
         df: pd.DataFrame,
         drugs_list: list,
         source_name: str,
-        title_col: str='title',
         graph: dict=None,
     ) -> Dict[str, Any]:
     """
@@ -98,7 +97,7 @@ def process_mentions(
     if graph is None:
         graph = {}
     for _, row in df.iterrows():
-        found_drugs = find_drugs_in_title(row[title_col], drugs_list)
+        found_drugs = find_drugs_in_title(row['title'], drugs_list)
         for drug in found_drugs:
             # Initialize the drug entry if it doesn't exist
             if drug not in graph:
@@ -109,7 +108,7 @@ def process_mentions(
                 graph[drug][row['journal']] = {"PubMed": [], "Clinical Trial": []}
             
             # Add mention to the appropriate source with title and date
-            mention_entry = {"title": row[title_col], "date": str(row['date'].date())}
+            mention_entry = {"title": row['title'], "date": str(row['date'].date())}
             graph[drug][row['journal']][source_name].append(mention_entry)
     return graph
 
