@@ -2,7 +2,7 @@
 
 Ce repertoire contient mon travail pour l'exercice Python et Data Engineering.
 
-Dans cet exercice, on a implémenté un pipeline de traitement de données qui permet traiter des données pour générer les relations entre les médicaments et leur mention dans les journaux scientifiques.
+Dans cet exercice, on a implémenté un pipeline qui permet traiter des données pour générer les relations entre les médicaments et leur mention dans les journaux scientifiques.
 
 ## Table des matières:
 
@@ -91,21 +91,16 @@ La pipeline organise les données dans une structure basée sur un dictionnaire 
 
 ### 4. Sortie en JSON et Génération de Graphes (Optionnel)
 
-La structure finale est exportée au format JSON. Optionnellement, un graphe des relations entre les médicaments et leur mention dans les journaux scientifiques est généré et sauvegardé en tant qu'image PNG (si vous avez installé `graphviz`).
+La structure finale est exportée au format JSON. Optionnellement, un graphe des relations entre les médicaments et leur mention dans les journaux scientifiques est généré et sauvegardé en tant qu'image PNG, si vous avez installé `graphviz`: [lien de téléchargement](https://graphviz.org/download/) (assurez-vous d'ajouter le chemin d'installation de Graphviz à votre variable d'environnement PATH).
 
 ## Exécution de la Pipeline
 
-### Depot des fichiers de données dans le dossier `data/` :
-
-- `drugs.csv`
-- `pubmed.csv`
-- `pubmed.json`
-- `clinical_trials.csv`
-
 ### Changement de Répertoire :
 
+Il faut se placer dans le répertoire `python-pipeline` avant d'exécuter la pipeline.
+
 ```bash
-cd "Python Data Engineering/python"
+cd "Python Data Engineering/python-pipeline"
 ```
 
 ### Installation des Dépendances :
@@ -125,3 +120,9 @@ python src/data_pipeline.py
 ```bash
 python -m unittest discover -s tests
 ```
+
+### PS :
+
+Les fichiers de données sont disponibles dans le dossier `data/` du repo GitHub.
+
+Ce n'est pas une bonne pratique de les stocker dans le repo, mais puisque les données ne sont pas sensibles, et ne sont pas volumineuses, je les ai inclus dans le repo pour faciliter l'exécution de la pipeline.
