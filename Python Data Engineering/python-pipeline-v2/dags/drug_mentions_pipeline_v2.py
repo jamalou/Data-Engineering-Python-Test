@@ -45,6 +45,8 @@ with DAG(
     start_date=datetime(2024, 10, 27),
     catchup=False,
 ) as dag:
+    
+    start_task = DummyOperator(task_id='start_task')
 
     @task
     def load_and_process_drugs():
@@ -62,35 +64,6 @@ with DAG(
         drugs_df = drugs_df.drop_duplicates(subset='drug')
         drugs_df.to_csv(INTERMEDIATE_DIR / 'processed_drugs.csv', index=False)
         logging.info('Processed drugs data saved to processed_drugs.csv')
-
-    @task
-    def merge_pubmed_and_trials_mentions():
-        """ Merge PubMed and Clinical Trials mentions into one graph """
-        with (
-            open(INTERMEDIATE_DIR / 'pubmed_mentions.json') as f1,
-            open(INTERMEDIATE_DIR / 'clinical_trial_mentions.json') as f2,
-        ):
-            pubmed_mentions_graph = json.load(f1)
-            trials_mentions_graph = json.load(f2)
-            mentions_graph = merge_mention_graphs(pubmed_mentions_graph, trials_mentions_graph)
-            with open(OUTPUTS_DIR / 'merged_mentions_graph.json', 'w') as f_out:
-                json.dump(mentions_graph, f_out, indent=4)
-
-    @task(task_id='draw_graph')
-    def draw_graph_as_image():
-        """ Draw the merged mentions graph as an image """
-        with open(OUTPUTS_DIR / 'merged_mentions_graph.json') as f:
-            mentions_graph = json.load(f)
-            draw_graph(mentions_graph, OUTPUTS_DIR)
-
-    @task
-    def clean_up_intermediate_files():
-        """ Clean up intermediate files """
-        for file in INTERMEDIATE_DIR.iterdir():
-            file.unlink()
-
-    # instantiate the tasks
-    start_task = DummyOperator(task_id='start_task')
 
     load_and_process_drugs_op = load_and_process_drugs()
 
@@ -127,9 +100,35 @@ with DAG(
         out_dir=INTERMEDIATE_DIR,
     )
 
+    @task
+    def merge_pubmed_and_trials_mentions():
+        """ Merge PubMed and Clinical Trials mentions into one graph """
+        with (
+            open(INTERMEDIATE_DIR / 'pubmed_mentions.json') as f1,
+            open(INTERMEDIATE_DIR / 'clinical_trial_mentions.json') as f2,
+        ):
+            pubmed_mentions_graph = json.load(f1)
+            trials_mentions_graph = json.load(f2)
+            mentions_graph = merge_mention_graphs(pubmed_mentions_graph, trials_mentions_graph)
+            with open(OUTPUTS_DIR / 'merged_mentions_graph.json', 'w') as f_out:
+                json.dump(mentions_graph, f_out, indent=4)
+
     merge_mentions_op = merge_pubmed_and_trials_mentions()
 
+    @task(task_id='draw_graph')
+    def draw_graph_as_image():
+        """ Draw the merged mentions graph as an image """
+        with open(OUTPUTS_DIR / 'merged_mentions_graph.json') as f:
+            mentions_graph = json.load(f)
+            draw_graph(mentions_graph, OUTPUTS_DIR)
+
     draw_graph_op = draw_graph_as_image()
+
+    @task
+    def clean_up_intermediate_files():
+        """ Clean up intermediate files """
+        for file in INTERMEDIATE_DIR.iterdir():
+            file.unlink()
 
     clean_up_intermediate_files_op = clean_up_intermediate_files()
 
