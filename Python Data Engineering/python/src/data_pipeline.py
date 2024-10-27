@@ -30,6 +30,7 @@ def pipeline(data_dir: str, outputs_dir: str) -> None:
     ####################################################################################################
     # Step 2: Data Cleaning and preprocessing
     ####################################################################################################
+    # TODO: put this in a function
     logging.info("Cleaning and preprocessing data...")
     # Capitalize drug names
     drugs_df['drug'] = drugs_df['drug'].str.capitalize()
