@@ -165,7 +165,7 @@ def draw_graph(mentions_graph: Dict[str, Any], output_dir: Path) -> None:
                         dot.edge(drug, journal, label=edge_label)
 
         # Render and visualize the graph
-        dot.render(output_dir/'drug_mentions_graph', format='png', cleanup=False)  # Outputs a PNG file
+        dot.render(output_dir/'drug_mentions_graph', format='png', cleanup=True)  # Outputs a PNG file
     except ImportError:
         logging.error("Graphviz not installed. Skipping graph drawing.")
         return
