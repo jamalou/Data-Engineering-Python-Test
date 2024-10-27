@@ -68,10 +68,10 @@ def pipeline(data_dir: str, outputs_dir: str) -> None:
     ####################################################################################################
     # Step 4: Save output
     ####################################################################################################
-    with open(outputs_dir / 'drug_mentions_graph_with_sources.json', 'w', encoding='utf-8') as f:
+    with open(outputs_dir / 'drug_mentions_graph.json', 'w', encoding='utf-8') as f:
         json.dump(mentions_graph, f, indent=4, ensure_ascii=False)
 
-    logging.info("Data pipeline executed successfully. Output saved to 'drug_mentions_graph_with_sources.json'.")
+    logging.info("Data pipeline executed successfully. Output saved to 'drug_mentions_graph.json'.")
 
     ####################################################################################################
     # Step 5: Draw graph with graphviz
