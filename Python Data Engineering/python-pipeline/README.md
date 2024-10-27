@@ -8,15 +8,7 @@ Dans cet exercice, on a implémenté un pipeline de traitement de données qui p
 
 - [Structure du projet](#structure-du-projet)
 - [Étapes de Traitement et de Nettoyage des Données](#étapes-de-traitement-et-de-nettoyage-des-données)
-  - [1. Chargement des Données](#1-chargement-des-données)
-  - [2. Nettoyage des Données](#2-nettoyage-des-données)
-  - [3. Transformation des Données](#3-transformation-des-données)
-  - [4. Sortie en JSON et Génération de Graphes (Optionnel)](#4-sortie-en-json-et-génération-de-graphes-optionnel)
 - [Exécution de la Pipeline](#exécution-de-la-pipeline)
-  - [Changement de Répertoire :](#changement-de-répertoire-)
-  - [Installation des Dépendances :](#installation-des-dépendances-)
-  - [Exécution du Pipeline :](#exécution-du-pipeline-)
-  - [Exécution des Tests :](#exécution-des-tests-)
 
 ## Structure du projet
 
@@ -102,6 +94,13 @@ La pipeline organise les données dans une structure basée sur un dictionnaire 
 La structure finale est exportée au format JSON. Optionnellement, un graphe des relations entre les médicaments et leur mention dans les journaux scientifiques est généré et sauvegardé en tant qu'image PNG (si vous avez installé `graphviz`).
 
 ## Exécution de la Pipeline
+
+### Depot des fichiers de données dans le dossier `data/` :
+
+- `drugs.csv`
+- `pubmed.csv`
+- `pubmed.json`
+- `clinical_trials.csv`
 
 ### Changement de Répertoire :
 
