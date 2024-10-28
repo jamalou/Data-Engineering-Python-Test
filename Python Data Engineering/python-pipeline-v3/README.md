@@ -6,6 +6,7 @@
 2. [Structure du projet](#Structure-du-projet)
 3. [Exécution de La Pipeline](#Exécution-de-La-Pipeline)
 4. [Resusltats](#Resusltats)
+5. [Traitement ad-hoc](#Traitement-ad-hoc)
 
 ## Introduction
 
