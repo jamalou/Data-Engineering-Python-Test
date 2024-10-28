@@ -4,10 +4,7 @@ This module contains utility functions
 from __future__ import annotations
 import logging
 from pathlib import Path
-import re
 from typing import Any, Dict, List
-
-import pandas as pd
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 

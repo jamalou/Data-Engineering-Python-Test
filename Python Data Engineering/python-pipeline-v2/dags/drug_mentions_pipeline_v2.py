@@ -7,12 +7,15 @@ import json
 import logging
 from pathlib import Path
 
+# pylint: disable=import-error
 from airflow import DAG
 from airflow.decorators import task
 from airflow.operators.dummy_operator import DummyOperator
 import pandas as pd
 
-from custom_operators.scientific_mentions_operators import LoadAndPreprocessScientificDataOperator, ProcessMentionsOperator
+from custom_operators.scientific_mentions_operators import (
+    LoadAndPreprocessScientificDataOperator, ProcessMentionsOperator
+)
 from includes.utils import merge_mention_graphs, draw_graph
 
 
@@ -45,7 +48,7 @@ with DAG(
     start_date=datetime(2024, 10, 27),
     catchup=False,
 ) as dag:
-    
+
     start_task = DummyOperator(task_id='start_task')
 
     @task
@@ -65,7 +68,7 @@ with DAG(
         drugs_df.to_csv(INTERMEDIATE_DIR / 'processed_drugs.csv', index=False)
         logging.info('Processed drugs data saved to processed_drugs.csv')
 
-    load_and_process_drugs_op = load_and_process_drugs()
+    load_and_process_drugs_op = load_and_process_drugs() # pylint: disable=invalid-name
 
     load_and_process_pubmed_op = LoadAndPreprocessScientificDataOperator(
         task_id='load_and_process_pubmed',
@@ -91,7 +94,7 @@ with DAG(
         source_name='PubMed',
         out_dir=INTERMEDIATE_DIR,
     )
-    
+
     process_trials_mentions_op = ProcessMentionsOperator(
         task_id='process_clinical_trials_mentions',
         drugs_file_path=INTERMEDIATE_DIR/'processed_drugs.csv',
@@ -104,25 +107,25 @@ with DAG(
     def merge_pubmed_and_trials_mentions():
         """ Merge PubMed and Clinical Trials mentions into one graph """
         with (
-            open(INTERMEDIATE_DIR / 'pubmed_mentions.json') as f1,
-            open(INTERMEDIATE_DIR / 'clinical_trial_mentions.json') as f2,
+            open(INTERMEDIATE_DIR/'pubmed_mentions.json', encoding="utf-8") as file1,
+            open(INTERMEDIATE_DIR/'clinical_trial_mentions.json', encoding="utf-8") as file2,
         ):
-            pubmed_mentions_graph = json.load(f1)
-            trials_mentions_graph = json.load(f2)
+            pubmed_mentions_graph = json.load(file1)
+            trials_mentions_graph = json.load(file2)
             mentions_graph = merge_mention_graphs(pubmed_mentions_graph, trials_mentions_graph)
-            with open(OUTPUTS_DIR / 'merged_mentions_graph.json', 'w') as f_out:
+            with open(OUTPUTS_DIR/'merged_mentions_graph.json', 'w', encoding="utf-8") as f_out:
                 json.dump(mentions_graph, f_out, indent=4)
 
-    merge_mentions_op = merge_pubmed_and_trials_mentions()
+    merge_mentions_op = merge_pubmed_and_trials_mentions() # pylint: disable=invalid-name
 
     @task(task_id='draw_graph')
     def draw_graph_as_image():
         """ Draw the merged mentions graph as an image """
-        with open(OUTPUTS_DIR / 'merged_mentions_graph.json') as f:
-            mentions_graph = json.load(f)
+        with open(OUTPUTS_DIR/'merged_mentions_graph.json', encoding="utf-8") as file:
+            mentions_graph = json.load(file)
             draw_graph(mentions_graph, OUTPUTS_DIR)
 
-    draw_graph_op = draw_graph_as_image()
+    draw_graph_op = draw_graph_as_image() # pylint: disable=invalid-name
 
     @task
     def clean_up_intermediate_files():
@@ -130,11 +133,12 @@ with DAG(
         for file in INTERMEDIATE_DIR.iterdir():
             file.unlink()
 
-    clean_up_intermediate_files_op = clean_up_intermediate_files()
+    clean_up_intermediate_files_op = clean_up_intermediate_files() # pylint: disable=invalid-name
 
     end_task = DummyOperator(task_id='end_task')
 
     # Set task dependencies
+    # pylint: disable=pointless-statement
     start_task >> [load_and_process_drugs_op, load_and_process_pubmed_op] >> process_pubmed_mentions_op
     start_task >> [load_and_process_drugs_op, load_and_process_trials_op] >> process_trials_mentions_op
     (

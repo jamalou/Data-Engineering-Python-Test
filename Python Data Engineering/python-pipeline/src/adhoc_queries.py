@@ -11,14 +11,14 @@ from typing import Tuple
 def get_journal_with_most_unique_drugs(mentions_graph: Path|dict) -> Tuple[str, int]:
     """
     Find the journal that mentions the most unique drugs
-    
+
     :param mentions_graph_path: Path to the drug mentions graph
     :return: Tuple: Journal with most unique drugs and the number of unique drugs
     """
     if isinstance(mentions_graph, Path):
-        with open(mentions_graph, 'r') as f:
+        with open(mentions_graph, 'r', encoding="utf-8") as f: # pylint: disable=invalid-name
             mentions_graph = json.load(f)
-    
+
     journal_drugs = defaultdict(set)
 
     # loop through each drug and journal in the mentions graph
@@ -27,13 +27,13 @@ def get_journal_with_most_unique_drugs(mentions_graph: Path|dict) -> Tuple[str, 
             journal_drugs[journal].add(drug.lower())
 
     max_journal = max(journal_drugs, key=lambda journal: len(journal_drugs[journal]))
-    
+
     return max_journal, len(journal_drugs[max_journal])
 
 def get_related_drugs_in_pubmed_only(mentions_graph: Path|dict, target_drug: str) -> set[str]:
     """
     Find drugs mentioned in the same journals as `target_drug` for PubMed only
-    
+
     :param mentions_graph_path: Path|dict: Path to the drug mentions graph or the mentions graph dictionary
     :param target_drug: str: The target drug to find related drugs for
     :return: The set of related drugs mentioned in the same journals as `target_drug` for PubMed only
@@ -48,9 +48,9 @@ def get_related_drugs_in_pubmed_only(mentions_graph: Path|dict, target_drug: str
         )
 
     if isinstance(mentions_graph, Path):
-        with open(mentions_graph, 'r') as f:
+        with open(mentions_graph, 'r', encoding="utf-8") as f: # pylint: disable=invalid-name
             mentions_graph = json.load(f)
-    
+
     pubmed_journals = set()
 
     # Find journals where the target drug is mentioned in PubMed only
