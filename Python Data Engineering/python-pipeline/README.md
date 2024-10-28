@@ -9,6 +9,7 @@ Dans cet exercice, on a implémenté un pipeline qui permet traiter des données
 - [Structure du projet](#structure-du-projet)
 - [Étapes de Traitement et de Nettoyage des Données](#étapes-de-traitement-et-de-nettoyage-des-données)
 - [Exécution de la Pipeline](#exécution-de-la-pipeline)
+- [Fonctions Ad Hoc](#fonctions-ad-hoc)
 
 ## Structure du projet
 
@@ -120,6 +121,18 @@ python src/data_pipeline.py
 ```bash
 python -m unittest discover -s tests
 ```
+
+## Fonctions Ad Hoc
+
+En complément des traitements de base, la pipeline inclut des fonctions ad hoc pour répondre à des questions spécifiques sur les données
+
+### 1 Identifier le Journal Mentionnant le Plus de Médicaments :
+
+Cette fonction parcourt le graphe des mentions pour trouver le journal ayant référencé le plus grand nombre de médicaments uniques.
+
+### Trouver les Médicaments Associés à un Médicament Cible dans PubMed Uniquement :
+
+Pour un médicament donné, cette fonction identifie les autres médicaments mentionnés dans les mêmes journaux pour les publications PubMed uniquement
 
 ### PS :
 

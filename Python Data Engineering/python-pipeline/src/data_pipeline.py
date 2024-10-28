@@ -8,6 +8,7 @@ from typing import Tuple
 
 import pandas as pd
 
+from src.adhoc_queries import get_journal_with_most_unique_drugs, get_related_drugs_in_pubmed_only
 from src.utils import parse_date, process_mentions, merge_mention_graphs, draw_graph
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
@@ -146,6 +147,24 @@ def pipeline(data_dir: str, outputs_dir: str) -> None:
     # and want to visualize the drug mentions graph
     draw_graph(mentions_graph, output_dir=outputs_dir)
     logging.info("Graph generated and saved as 'drug_mentions_graph.png'.")
+
+    ####################################################################################################
+    # Step 6: Adhoc queries
+    ####################################################################################################
+
+    # Adhoc queries no. 1: journals with the most drug mentions
+    logging.info("AdHoc Query: Journals with the most drug mentions:")
+    journal, mentions = get_journal_with_most_unique_drugs(mentions_graph)
+    print(f"\nJournal with most unique drugs: {journal} with {mentions} unique drugs\n")
+
+    # Adhoc queries no. 2: related drugs in PubMed only
+    logging.info("AdHoc Query: Related drugs in PubMed only:")
+    for drug in mentions_graph:
+        related_drugs = get_related_drugs_in_pubmed_only(mentions_graph, drug)
+        if related_drugs:
+            print(f"\nRelated drugs in PubMed only for '{drug}': {related_drugs}")
+        else:
+            print(f"\nNo related drugs in PubMed only for '{drug}'")
 
 if __name__ == "__main__":
     pipeline(DATA_DIR, OUTPUTS_DIR)
