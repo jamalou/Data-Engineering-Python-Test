@@ -3,6 +3,9 @@
 ### Table des Matières
 
 1. [Introduction](#Introduction)
+2. [Structure du projet](#Structure-du-projet)
+3. [Exécution de La Pipeline](#Exécution-de-La-Pipeline)
+4. [Resusltats](#Resusltats)
 
 ## Introduction
 
@@ -63,3 +66,5 @@ J'ai du transformer le fichier `data/raw/pubmed.json` en NEWLINE_DELIMITED_JSON 
 ```bash
 jq -c '.[]' pubmed.json > pubmed_newline.json && mv pubmed_newline.json pubmed.json
 ```
+
+Les fichiers de données sont disponibles dans le dossier `data/` du repo GitHub. Ce n'est pas une bonne pratique de les stocker dans le repo, mais puisque les données ne sont pas sensibles, et ne sont pas volumineuses, je les ai inclus dans le repo pour faciliter l'exécution de la pipeline.
