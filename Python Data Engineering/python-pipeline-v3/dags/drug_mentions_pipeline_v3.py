@@ -148,7 +148,6 @@ with DAG(
                 },
                 "writeDisposition": "WRITE_TRUNCATE",
             },
-            
         }
     )
 

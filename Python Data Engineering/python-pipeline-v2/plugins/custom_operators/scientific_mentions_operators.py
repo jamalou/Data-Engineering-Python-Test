@@ -6,12 +6,13 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
+from typing import Any, Dict, List
+
 import re
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from airflow.exceptions import AirflowException
 import pandas as pd
-from typing import Any, Dict, List
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
@@ -78,15 +79,15 @@ class LoadAndPreprocessScientificDataOperator(BaseOperator):
             else:
                 raise AirflowException(f"Unsupported file extension: {ext}")
             logging.info("%s data loaded successfully.", file_path)
-            
+
             data_dfs.append(data_df)
-        
+
         concatenated_df = pd.concat(data_dfs)
         if self.rename_cols:
             concatenated_df = concatenated_df.rename(columns=self.rename_cols)
         concatenated_df['date'] = concatenated_df['date'].apply(self.parse_date)
         concatenated_df.to_csv(self.out_dir / f'processed_{self.base_name}.csv', index=False)
-                
+
         logging.info(
             "Preprocessed %s data saved successfully to %s/processed_%s.csv.",
             self.base_name, self.out_dir, self.base_name
@@ -145,7 +146,8 @@ class ProcessMentionsOperator(BaseOperator):
             title_col: str='title'
         ) -> Dict[str, Any]:
         """
-        This function processes drug mentions in a DataFrame and returns a dict of drug mentions with journals and dates.
+        This function processes drug mentions in a DataFrame and
+        returns a dict of drug mentions with journals and dates.
 
         :param df: pd.DataFrame: DataFrame containing drug mentions
         :param drugs_list: list: List of all drugs
