@@ -96,6 +96,35 @@ La structure finale est exportée au format JSON. Optionnellement, un graphe des
 
 ## Exécution de la Pipeline
 
+### Installation de l'Environnement Virtuel :
+
+Vous pouvez installer les dépendances dans un environnement virtuel pour éviter les conflits avec les autres projets Python.
+
+Vous pouvez utiliser `venv` pour créer un environnement virtuel. Assurez-vous d'avoir Python 3.6+ installé sur votre machine.
+
+Créez un environnement virtuel et activez-le :
+
+- Sur Windows :
+
+```bash
+python -m venv "Python Data Engineering\python-pipeline\pipeline_venv"
+.\"Python Data Engineering"\python-pipeline\pipeline_venv\Scripts\activate
+```
+
+- Sur MacOS/Linux :
+
+```bash
+python -m venv "Python Data Engineering/python-pipeline/pipeline_venv"
+source "Python Data Engineering/python-pipeline/pipeline_venv/bin/activate"
+```
+
+Ou vous pouvez utiliser `conda` pour créer un environnement virtuel, si vous avez Anaconda ou Miniconda installé sur votre machine :
+
+```bash
+conda create --name pipeline_venv
+conda activate pipeline_venv
+```
+
 ### Changement de Répertoire :
 
 Il faut se placer dans le répertoire `python-pipeline` avant d'exécuter la pipeline.
@@ -113,7 +142,7 @@ pip install -r requirements.txt
 ### Exécution de la Pipeline :
 
 ```bash
-python src/data_pipeline.py
+python -m src.data_pipeline
 ```
 
 ### Exécution des Tests :
